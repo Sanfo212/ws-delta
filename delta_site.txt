@@ -1,0 +1,368 @@
+
+=============================================
+Linode/Git Deployment
+=============================================
+
+Ubuntu - London - Nginx
+
+ROOT_PW = _Sandford2129446
+SANFO_PW = pokko
+
+ssh root@176.58.122.250
+ssh sanfo@176.58.122.250
+=============================================
+
+=============================================
+ssh  ----  Secure Shell
+gunicorn  ---- For production level python server
+supervisor ---- Enables Git to be implamented
+FastApi ---- API Framework
+Git ----  Version Control
+Nginx  ---- Webserver
+Jinja 2  ----  Templating Engine
+=============================================
+
+=============================================
+PART 1 - Provision your Linode and your machine
+=============================================
+https://www.youtube.com/watch?v=A_jk2UtVMZY
+=============================================
+Ubuntu20.04LTS
+London
+Nginx
+�5
+
+
+=============================================
+PART 2 - Securing Your Web App
+=============================================
+https://www.youtube.com/watch?v=FAmJ2t_7faQ
+=============================================
+
+--  ON LOCAL MACHINE  --
+
+(Generate a new key If needed)
+
+C:\Users\San\.ssh
+ssh-keygen -t rsa -b 4096 
+
+
+=============================================
+Set up ssh access for a root and new limited user
+=============================================
+
+--  ON SERVER  --
+
+root@localhost:~# mkdir -p ~/.ssh
+root@localhost:~# chmod 700 ~/.ssh
+root@localhost:~# nano ~/.ssh/authorized_keys
+
+
+Copy the contents of 
+(C:\Users\San\.ssh/id_rsa.pub)
+to the authorized_keys file
+
+"""
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDHIUks9vWaDm+R0zgiC4oEdUuz70vdIYOPjmzCYbsytIFhgu21axgREvjdiXe95XWOO0uoP9gd58Kd7J7qQ2wobQ+RofpaZYXFqIDu6dgnE98S48M8LVFT8Mt4UigSjmWO3nDxJH/ItEq8utvcJQGt6vzldPDHHyvZOHA8h9JikVONJ4FUnwvr42C6EAi1HCi35glPlsPQLBCxHpfIr/dMSg3yXBoczysht5jNaOesoDAmf+DpAWJJyZ4SR60PTQyLXt0vLs++wR/aiGe6Qt7H06wzlACWzlhc3m0B+rGpTP3WyQu35w1ZSVhCDNjFgW4h68XSbbeF99PWI+zxKaAcm864UYKesZ1pgivEjX8RlEsyrUgHMVX3dMDxgIaUBFNSnWvV0eMMTIp1nf76jSQYu3hFPha17bQdu+UG7wuPDOpaMG8UcrcEn38ZW5aRoZiEMSo9GA6EQOeCAEUlunkCf5gH+6UFXJNU32aG8GpZBX/4IptZZehkojdPGR6m0UNvXL5JlYs5wibIE7zXBZvH//GiZLXFLNqdECFaZWAsYgMfbMP6Qjs3/usXt5HQul0rI9pIBbsg/L1Mj9LEeOBnbsD5Ry2RKRUbXWrMmlnDTf6Piqfaj0wetY2tbQPPc88SX4FYBKdc9hTNwDm8Wswr0Y61LqG1R2mw2vaNj2xlkQ== san@Dell
+"""
+
+
+root@localhost:~# chmod 600 ~/.ssh/authorized_keys
+root@localhost:~# exit
+ssh root@178.79.166.208
+--NO MORE PASSWORD--
+
+
+=============================================
+
+(TS 13:00)
+
+root@localhost:~# sudo useradd -m sanfo
+root@localhost:~# sudo passwd sanfo
+pokko
+pokko
+exit
+
+ssh sanfo@176.58.122.250
+pokko
+
+$ pwd
+/home/sanfo
+
+$ mkdir -p ~/.ssh
+$ chmod 700 ~/.ssh
+$ nano ~/.ssh/authorized_keys
+
+
+Copy the contents of 
+(C:\Users\San\.ssh/id_rsa.pub)
+to the authorized_keys file
+
+"""
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDHIUks9vWaDm+R0zgiC4oEdUuz70vdIYOPjmzCYbsytIFhgu21axgREvjdiXe95XWOO0uoP9gd58Kd7J7qQ2wobQ+RofpaZYXFqIDu6dgnE98S48M8LVFT8Mt4UigSjmWO3nDxJH/ItEq8utvcJQGt6vzldPDHHyvZOHA8h9JikVONJ4FUnwvr42C6EAi1HCi35glPlsPQLBCxHpfIr/dMSg3yXBoczysht5jNaOesoDAmf+DpAWJJyZ4SR60PTQyLXt0vLs++wR/aiGe6Qt7H06wzlACWzlhc3m0B+rGpTP3WyQu35w1ZSVhCDNjFgW4h68XSbbeF99PWI+zxKaAcm864UYKesZ1pgivEjX8RlEsyrUgHMVX3dMDxgIaUBFNSnWvV0eMMTIp1nf76jSQYu3hFPha17bQdu+UG7wuPDOpaMG8UcrcEn38ZW5aRoZiEMSo9GA6EQOeCAEUlunkCf5gH+6UFXJNU32aG8GpZBX/4IptZZehkojdPGR6m0UNvXL5JlYs5wibIE7zXBZvH//GiZLXFLNqdECFaZWAsYgMfbMP6Qjs3/usXt5HQul0rI9pIBbsg/L1Mj9LEeOBnbsD5Ry2RKRUbXWrMmlnDTf6Piqfaj0wetY2tbQPPc88SX4FYBKdc9hTNwDm8Wswr0Y61LqG1R2mw2vaNj2xlkQ== san@Dell
+"""
+
+$ chmod 600 ~/.ssh/authorized_keys
+$ exit
+
+ssh sanfo@176.58.122.250
+exit
+
+
+
+(TS 19:05)
+=============================================
+Set up permissions and groups
+=============================================
+
+
+ssh root@176.58.122.250
+sudo groupadd www-data -- Already Exists ???
+
+root@localhost:~# sudo usermod -a -G www-data sanfo
+root@localhost:~# grep www-data /etc/group
+
+root@localhost:~# cd /var/
+root@localhost:/var# ls -la
+
+root@localhost:/var# mkdir -p /var/www
+root@localhost:/var# mkdir -p /var/www-logs
+root@localhost:/var# mkdir -p /var/www-git
+
+root@localhost:/var# sudo chgrp -R www-data /var/www
+root@localhost:/var# sudo chgrp -R www-data /var/www-logs
+root@localhost:/var# sudo chgrp -R www-data /var/www-git
+
+ls -la
+
+root@localhost:/var# sudo chmod -R g+rwxs /var/www
+root@localhost:/var# sudo chmod -R g+rwxs /var/www-logs
+root@localhost:/var# sudo chmod -R g+rwxs /var/www-git
+
+reboot
+
+
+
+TS(25:39)
+=============================================
+DEPENDECIES - (NGINX & UFW)
+=============================================
+
+PS C:\Users\San> ssh root@176.58.122.250
+
+root@localhost:~# sudo apt update && sudo apt upgrade -y
+root@localhost:~# sudo apt-get install nginx -y
+root@localhost:~# sudo apt-get install ufw -y
+
+
+root@localhost:~# sudo ufw allow ssh
+root@localhost:~# sudo ufw enable
+root@localhost:~# sudo ufw status
+
+root@localhost:~# sudo ufw allow 'Nginx Full'
+root@localhost:~# sudo ufw status
+exit
+
+PS C:\Users\San> ssh sanfo@178.79.166.208
+
+cd /var/www/html
+nano index.nginx-debian.html   ----(PERMISSSION DENIED)
+exit
+
+PS C:\Users\San> ssh root@176.58.122.250
+cd  /var/www
+
+
+root@localhost:/var/www# sudo chgrp -R www-data /var/www/html
+ls -la
+root@localhost:/var/www# sudo chmod -R g+rwxs /var/www/html
+exit
+
+PS C:\Users\San> ssh sanfo@176.58.122.250
+
+cd /var/www/html
+nano index.nginx-debian.html
+
+EDIT SOME TXT AND REFRESH THE SERVER
+GO TO 176.58.122.250 AND INSPECT
+
+
+
+=============================================
+PART 3 - Git & Version Control 
+=============================================
+https://www.youtube.com/watch?v=F-A81iMgwww
+=============================================
+
+
+--PS C:\Users\San\Workspace\DjangoProjects\delta>
+
+git init
+git status
+git add html
+git commit -m 'Initial tracking of html'
+git status
+
+
+
+--CREATE A ".gitignore" FILE--
+
+git add .gitignore
+git commit -m 'Added .gitignore file' 
+git log 
+
+
+
+--ALTER A PIECE OF TEXT IN HTML FILE--
+
+git status
+git diff  html/index.nginx-debian.html
+
+git reset
+git diff  html/index.nginx-debian.html
+
+git reset --hard
+git diff  html/index.nginx-debian.html
+
+git add html/index.nginx-debian.html
+git commit -m 'Changed colour to red'
+
+git status
+git log
+
+
+(TS 19:19)
+=============================================
+Set up a remote repository on your server
+=============================================
+
+=============================================
+
+ssh root@178.79.166.208
+
+root@localhost:~# sudo apt update && sudo apt upgrade -y
+root@localhost:~# sudo apt install git -y
+root@localhost:~# git config --global init.defaultBranch master
+
+root@localhost:~# cd /var/
+cd /var/www-git
+mkdir delta.git
+cd delta.git
+git init --bare
+
+
+=============================================
+--- ON LOCAL MACINE
+
+PS C:\Users\San\Workspace\DjangoProjects\delta> ls
+
+git remote add linode ssh://sanfo@176.58.122.250:/var/www-git/delta.git
+
+git push linode master  --- ERROR
+git remote -v
+
+
+=============================================
+ERROR CAUSED BY PERMISSIONS WHILE CREATING DELTA.GIT
+=============================================
+
+=============================================
+--- ON THE SERVER
+
+root@localhost:/var/www-git# rm -rf delta.git
+root@localhost:/var/www-git# ls -la
+exit
+
+PS C:\Users\San> ssh sanfo@176.58.122.250
+cd /var/www-git
+mkdir delta.git
+cd delta.git
+git init --bare
+
+=============================================
+--LOCAL MACINE
+
+git push linode master
+
+
+=============================================
+--- ON THE SERVER
+
+cd /var/www-git/delta.git
+cd hooks
+ls
+touch post-receive
+ls
+chmod +x post-receive
+
+nano post-receive
+
+"""
+#!/bin/bash
+
+git --work-tree=/var/www/ --git-dir=/var/www-git/delta.git checkout master -f
+"""
+
+./post-receive
+bash post-receive
+(The "Master" Referance is only needed to run once)
+
+
+nano post-receive
+
+"""
+#!/bin/bash
+
+git --work-tree=/var/www/ --git-dir=/var/www-git/delta.git checkout -f
+"""
+bash post-receive
+
+=============================================
+--LOCAL MACINE
+git add .
+git commit -m 'Git push is now working'
+git push linode master
+
+
+
+=============================================
+PART 4 - Creating a Virtual Environment 
+=============================================
+
+
+http://176.58.122.250/
+=============================================
+
+=============================================
+
+=============================================
+
+=============================================
+PART 5 - Deployment with NGINX & Supervisor
+=============================================
+
+
+
+=============================================
+
+=============================================
+
+=============================================
+
+=============================================
+
+=============================================
+
+=============================================
+
+=============================================
+
+=============================================
+
+=============================================
+
+=============================================
+
+=============================================
+
+=============================================

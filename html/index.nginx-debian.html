@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx on Ubuntu!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p>(venv) sanfo@FastApiMicro:/var/www/app$ python3<br/>
+Python 3.8.10 (default, Sep 28 2021, 16:10:42)<br/>
+[GCC 9.3.0] on linux<br/>
+Type "help", "copyright", "credits" or "license" for more information.<br/>
+>>> import pathlib<br/>
+>>> from PIL import Image<br/>
+>>> import pytesseract<br/>
+>>><br/>
+>>> BASE_DIR = pathlib.Path().parent<br/>
+>>> BASE_DIR<br/>
+PosixPath('.')<br/>
+>>> IMG_DIR = BASE_DIR / "images"<br/>
+>>> img_path = IMG_DIR / "ingredients-1.png"<br/>
+>>> img = Image.open(img_path)<br/>
+>>> preds = pytesseract.image_to_string(img)<br/>
+>>> predictions = [x for x in preds.split("\n")]<br/>
+>>> predictions<br/>
+['1 Tablespoon chili powder', '', '1 teaspoon ground cumin', '', '3/4 teaspoon salt', '', '1/2 teaspo>>>> exit()</p>
+
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
