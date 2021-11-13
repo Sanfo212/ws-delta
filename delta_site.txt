@@ -22,6 +22,8 @@ Nginx  ---- Webserver
 Jinja 2  ----  Templating Engine
 =============================================
 
+
+
 =============================================
 PART 1 - Provision your Linode and your machine
 =============================================
@@ -30,7 +32,7 @@ https://www.youtube.com/watch?v=A_jk2UtVMZY
 Ubuntu20.04LTS
 London
 Nginx
-�5
+
 
 
 =============================================
@@ -296,6 +298,8 @@ git push linode master
 =============================================
 PART 4 - Creating a Virtual Environment 
 =============================================
+https://www.youtube.com/watch?v=tWIJOktVkb8
+=============================================
 --LOCAL MACINE
 
 
@@ -312,29 +316,128 @@ pip install fastapi
 =============================================
 PART 5 - Deployment with NGINX & Supervisor
 =============================================
+https://www.youtube.com/watch?v=NrEH9lYI24I
+=============================================
+
+
+ssh root@176.58.122.250
+
+--- ON THE SERVER
+
+
+cd /etc/nginx/sites-available
+
+cat default
+
+
+
+--LOCAL MACINE
+
+
+Create+Edit - ~\\\delta\nginx\myapp.conf
+
+
+"""
+
+upstream myproxy{
+    server localhost:8000;
+}
+
+server {
+    listen 80;
+    server_name delta;
+    root /var/www/html;
+
+    location / {
+        porxy_pass http://myproxy;
+        proxy_set_header X-Forwarded-for $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+    }
+
+}
+
+"""
+--LOCAL MACINE
+
+
+git status
+git add .
+git commit -m "Added Nginx conf"
+git push linode master
+
+
+ssh root@176.58.122.250
+
+--- ON THE SERVER
+
+cd /etc/nginx
+
+cp /var/www/nginx/myapp.conf /etc/nginx/sites-available
+cd /etc/nginx/sites-available
+ls -la
+
+
+cd /etc/nginx/sites-enabled
+rm default
+
+
+sudo systemctl reload nginx
+
+cd /etc/nginx/sites-available
+
+
+(This time we create a soft link)
+ln -s /var/www/nginx/myapp.conf /etc/nginx/sites-enabled/myapp.conf
+
+sudo systemctl reload nginx
+
+
+--- ON THE SERVER (sanfo)  -------------------PROBLEM WITH VENV
+
+cd /var/www/app
+./venv/bin/activate
 
 
 
 
+
+uvicorn main:app
+
+gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
+
+
+pkill -HUP guinicorn
+pkill guinicorn
 
 
 
 =============================================
+
+
 
 =============================================
 PART 6 -
 =============================================
-
+https://www.youtube.com
+=============================================
 
 
 
 
 =============================================
+
+
 
 =============================================
 PART 7 -
 =============================================
+https://www.youtube.com
+=============================================
 
+
+
+=============================================
 
 
 
@@ -344,3 +447,8 @@ PART 7 -
 
 =============================================
 
+
+
+
+
+=============================================
