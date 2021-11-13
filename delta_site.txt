@@ -243,8 +243,9 @@ ssh root@178.79.166.208
 root@localhost:~# sudo apt update && sudo apt upgrade -y
 root@localhost:~# sudo apt install git -y
 root@localhost:~# git config --global init.defaultBranch master
+exit
 
-root@localhost:~# cd /var/
+PS C:\Users\San> ssh sanfo@176.58.122.250
 cd /var/www-git
 mkdir delta.git
 cd delta.git
@@ -262,28 +263,6 @@ git push linode master  --- ERROR
 git remote -v
 
 
-=============================================
-ERROR CAUSED BY PERMISSIONS WHILE CREATING DELTA.GIT
-=============================================
-
-=============================================
---- ON THE SERVER
-
-root@localhost:/var/www-git# rm -rf delta.git
-root@localhost:/var/www-git# ls -la
-exit
-
-PS C:\Users\San> ssh sanfo@176.58.122.250
-cd /var/www-git
-mkdir delta.git
-cd delta.git
-git init --bare
-
-=============================================
---LOCAL MACINE
-
-git push linode master
-
 
 =============================================
 --- ON THE SERVER
@@ -295,18 +274,6 @@ touch post-receive
 ls
 chmod +x post-receive
 
-nano post-receive
-
-"""
-#!/bin/bash
-
-git --work-tree=/var/www/ --git-dir=/var/www-git/delta.git checkout master -f
-"""
-
-./post-receive
-bash post-receive
-(The "Master" Referance is only needed to run once)
-
 
 nano post-receive
 
@@ -315,10 +282,11 @@ nano post-receive
 
 git --work-tree=/var/www/ --git-dir=/var/www-git/delta.git checkout -f
 """
-bash post-receive
+./post-receive
 
 =============================================
 --LOCAL MACINE
+
 git add .
 git commit -m 'Git push is now working'
 git push linode master
@@ -328,14 +296,18 @@ git push linode master
 =============================================
 PART 4 - Creating a Virtual Environment 
 =============================================
+--LOCAL MACINE
 
 
-http://176.58.122.250/
-=============================================
+python -m venv venv
 
-=============================================
+.\venv\Scipts\activate
 
-=============================================
+add venv/ & pyvenv.cfg to .gitignore
+
+pip install --upgrade pip
+pip install fastapi
+
 
 =============================================
 PART 5 - Deployment with NGINX & Supervisor
@@ -343,7 +315,28 @@ PART 5 - Deployment with NGINX & Supervisor
 
 
 
+
+
+
+
 =============================================
+
+=============================================
+PART 6 -
+=============================================
+
+
+
+
+
+=============================================
+
+=============================================
+PART 7 -
+=============================================
+
+
+
 
 =============================================
 
@@ -351,18 +344,3 @@ PART 5 - Deployment with NGINX & Supervisor
 
 =============================================
 
-=============================================
-
-=============================================
-
-=============================================
-
-=============================================
-
-=============================================
-
-=============================================
-
-=============================================
-
-=============================================
